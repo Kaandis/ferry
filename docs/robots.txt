@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://kaandis.github.io/ferry/sitemap.xml

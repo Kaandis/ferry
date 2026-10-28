@@ -1,0 +1,815 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%@, %@": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@"
+          }
+        }
+      }
+    },
+    "%lld windows": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld window"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld windows"
+                }
+              }
+            }
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pencere"
+          }
+        }
+      }
+    },
+    "+": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+"
+          }
+        }
+      }
+    },
+    "1 s": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 sn"
+          }
+        }
+      }
+    },
+    "About": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hakkında"
+          }
+        }
+      }
+    },
+    "Accessibility": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erişilebilirlik"
+          }
+        }
+      }
+    },
+    "Add App…": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uygulama Ekle…"
+          }
+        }
+      }
+    },
+    "All Spaces": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm Space'ler"
+          }
+        }
+      }
+    },
+    "All displays": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm ekranlar"
+          }
+        }
+      }
+    },
+    "Allowed": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İzin verildi"
+          }
+        }
+      }
+    },
+    "Allow…": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İzin Ver…"
+          }
+        }
+      }
+    },
+    "Apps you add here never appear in the switcher or Dock previews.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buraya eklediğin uygulamalar switcher'da ve Dock önizlemelerinde hiç görünmez."
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vazgeç"
+          }
+        }
+      }
+    },
+    "Close": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kapat"
+          }
+        }
+      }
+    },
+    "Close Window": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pencereyi Kapat"
+          }
+        }
+      }
+    },
+    "Current Space": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu Space"
+          }
+        }
+      }
+    },
+    "Delay": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gecikme"
+          }
+        }
+      }
+    },
+    "Desktop %lld": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masaüstü %lld"
+          }
+        }
+      }
+    },
+    "Display with the active window": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etkin pencerenin olduğu ekran"
+          }
+        }
+      }
+    },
+    "Display with the pointer": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İmlecin olduğu ekran"
+          }
+        }
+      }
+    },
+    "Displays": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ekranlar"
+          }
+        }
+      }
+    },
+    "Dock": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dock"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitti"
+          }
+        }
+      }
+    },
+    "Every window, one Tab away.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her pencere bir Tab uzağında."
+          }
+        }
+      }
+    },
+    "Every window, one Tab away. Ferry needs one permission to work, and one more to show window pictures.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her pencere bir Tab uzağında. Ferry'nin çalışmak için bir, pencere görüntülerini göstermek için bir izne daha ihtiyacı var."
+          }
+        }
+      }
+    },
+    "Excluded Apps": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hariç Tutulanlar"
+          }
+        }
+      }
+    },
+    "Ferry": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferry"
+          }
+        }
+      }
+    },
+    "Ferry listens to the Dock itself, not to mouse movement.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferry fare hareketini değil, Dock'un kendisini dinler."
+          }
+        }
+      }
+    },
+    "Ferry replaces the system’s ⌘Tab while it runs, and hands it back when you quit.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferry çalışırken sistemin ⌘Tab'ının yerini alır, çıkınca geri verir."
+          }
+        }
+      }
+    },
+    "Finish Setting Up…": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurulumu Tamamla…"
+          }
+        }
+      }
+    },
+    "From": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaynak"
+          }
+        }
+      }
+    },
+    "Full Screen": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tam Ekran"
+          }
+        }
+      }
+    },
+    "General": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genel"
+          }
+        }
+      }
+    },
+    "Hidden": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gizli"
+          }
+        }
+      }
+    },
+    "Include hidden apps": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gizlenmiş uygulamaları da göster"
+          }
+        }
+      }
+    },
+    "Include minimized windows": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Küçültülmüş pencereleri de göster"
+          }
+        }
+      }
+    },
+    "Instant": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anında"
+          }
+        }
+      }
+    },
+    "Language": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dil"
+          }
+        }
+      }
+    },
+    "Later": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonra"
+          }
+        }
+      }
+    },
+    "Launch at login": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Girişte başlat"
+          }
+        }
+      }
+    },
+    "Lets Ferry list your windows, catch the shortcut and bring a window forward.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferry'nin pencerelerini listelemesini, kısayolu yakalamasını ve bir pencereyi öne getirmesini sağlar."
+          }
+        }
+      }
+    },
+    "Minimize": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Küçült"
+          }
+        }
+      }
+    },
+    "Minimized": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Küçültülmüş"
+          }
+        }
+      }
+    },
+    "Next": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonraki"
+          }
+        }
+      }
+    },
+    "No matching windows": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eşleşen pencere yok"
+          }
+        }
+      }
+    },
+    "No open windows": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Açık pencere yok"
+          }
+        }
+      }
+    },
+    "Not allowed": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İzin yok"
+          }
+        }
+      }
+    },
+    "Only the display it opens on": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yalnızca açıldığı ekran"
+          }
+        }
+      }
+    },
+    "Open": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aç"
+          }
+        }
+      }
+    },
+    "Open Permissions…": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İzinleri Aç…"
+          }
+        }
+      }
+    },
+    "Optional": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İsteğe bağlı"
+          }
+        }
+      }
+    },
+    "Permissions": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İzinler"
+          }
+        }
+      }
+    },
+    "Permissions…": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İzinler…"
+          }
+        }
+      }
+    },
+    "Quit": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çık"
+          }
+        }
+      }
+    },
+    "Quit Ferry": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferry'den Çık"
+          }
+        }
+      }
+    },
+    "Remove": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaldır"
+          }
+        }
+      }
+    },
+    "Required": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerekli"
+          }
+        }
+      }
+    },
+    "Restart Ferry to switch languages.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dili değiştirmek için Ferry'yi yeniden başlat."
+          }
+        }
+      }
+    },
+    "Restart Now": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şimdi Yeniden Başlat"
+          }
+        }
+      }
+    },
+    "Screen Recording": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ekran Kaydı"
+          }
+        }
+      }
+    },
+    "Search": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ara"
+          }
+        }
+      }
+    },
+    "Settings…": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayarlar…"
+          }
+        }
+      }
+    },
+    "Shortcut": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kısayol"
+          }
+        }
+      }
+    },
+    "Show menu bar icon": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menü çubuğu simgesini göster"
+          }
+        }
+      }
+    },
+    "Show on": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Göründüğü yer"
+          }
+        }
+      }
+    },
+    "Show windows when hovering a Dock icon": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dock simgesinin üzerine gelince pencereleri göster"
+          }
+        }
+      }
+    },
+    "Shows a picture of each window. Without it you see app icons. Pictures stay in memory and are never saved or sent.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her pencerenin görüntüsünü gösterir. İzin vermezsen uygulama simgeleri görünür. Görüntüler yalnızca bellekte durur; asla kaydedilmez ya da gönderilmez."
+          }
+        }
+      }
+    },
+    "Switcher": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switcher"
+          }
+        }
+      }
+    },
+    "System": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistem"
+          }
+        }
+      }
+    },
+    "Try it:": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dene:"
+          }
+        }
+      }
+    },
+    "Type to search windows": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pencere aramak için yaz"
+          }
+        }
+      }
+    },
+    "Version %@": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sürüm %@"
+          }
+        }
+      }
+    },
+    "Welcome to Ferry": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferry'ye hoş geldin"
+          }
+        }
+      }
+    },
+    "Windows": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pencereler"
+          }
+        }
+      }
+    },
+    "kaandis.github.io/ferry": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kaandis.github.io/ferry"
+          }
+        }
+      }
+    },
+    "space": {
+      "comment": "Space bar keycap",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "boşluk"
+          }
+        }
+      }
+    },
+    "⌃ Control + Tab": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌃ Control + Tab"
+          }
+        }
+      }
+    },
+    "⌘ Command + Tab": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌘ Command + Tab"
+          }
+        }
+      }
+    },
+    "⌥ Option + Tab": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌥ Option + Tab"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
