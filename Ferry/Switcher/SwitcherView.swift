@@ -79,6 +79,7 @@ struct SwitcherView: View {
 }
 
 private struct Tile: View {
+    @Environment(\.palette) private var palette
     let item: WindowItem
     let image: CGImage?
     let layout: SwitcherLayout
@@ -102,7 +103,7 @@ private struct Tile: View {
                         .frame(width: 16, height: 16)
                     Text(item.displayTitle)
                         .font(.system(size: 12, weight: isSelected ? .semibold : .medium))
-                        .foregroundStyle(isSelected ? Theme.ink : Theme.ink2)
+                        .foregroundStyle(isSelected ? palette.ink : palette.ink2)
                         .lineLimit(1)
                         .truncationMode(.middle)
                 }
@@ -117,7 +118,7 @@ private struct Tile: View {
             .background {
                 if isSelected {
                     RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(Theme.card)
+                        .fill(palette.card)
                         .overlay(
                             RoundedRectangle(cornerRadius: 16, style: .continuous)
                                 .strokeBorder(Theme.coral, lineWidth: 2)
@@ -140,18 +141,19 @@ private struct Tile: View {
 }
 
 private struct SearchField: View {
+    @Environment(\.palette) private var palette
     let query: String
 
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(Theme.ink3)
+                .foregroundStyle(palette.ink3)
             if query.isEmpty {
                 Text("Type to search windows")
-                    .foregroundStyle(Theme.ink3)
+                    .foregroundStyle(palette.ink3)
             } else {
-                Text(query).foregroundStyle(Theme.ink)
+                Text(query).foregroundStyle(palette.ink)
             }
             RoundedRectangle(cornerRadius: 1).fill(Theme.coral).frame(width: 2, height: 18)
                 .padding(.leading, query.isEmpty ? -8 : -6)
@@ -161,33 +163,35 @@ private struct SearchField: View {
         .font(.system(size: 17, weight: .medium))
         .padding(.horizontal, 14)
         .frame(height: 40)
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Theme.card))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Theme.hairline))
+        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(palette.card))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(palette.hairline))
         .frame(maxWidth: 520)
     }
 }
 
 private struct EmptyState: View {
+    @Environment(\.palette) private var palette
     let isSearching: Bool
 
     var body: some View {
         VStack(spacing: 6) {
             Image(systemName: isSearching ? "text.magnifyingglass" : "macwindow")
                 .font(.system(size: 24, weight: .regular))
-                .foregroundStyle(Theme.ink3)
+                .foregroundStyle(palette.ink3)
             Text(isSearching ? "No matching windows" : "No open windows")
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(Theme.ink2)
+                .foregroundStyle(palette.ink2)
         }
     }
 }
 
 private struct HintBar: View {
+    @Environment(\.palette) private var palette
     let isSearching: Bool
     let showsPictures: Bool
 
     var body: some View {
-        HStack(spacing: 14) {
+        HStack(spacing: 11) {
             if isSearching {
                 hint("↩", "Open")
                 hint("⇥", "Next")
@@ -201,13 +205,13 @@ private struct HintBar: View {
                 hint("esc", "Cancel")
             }
         }
-        .font(.system(size: 11.5, weight: .medium))
-        .foregroundStyle(Theme.ink3)
+        .font(.system(size: 10, weight: .medium))
+        .foregroundStyle(palette.ink3)
     }
 
     private func hint(_ key: String, _ label: LocalizedStringKey) -> some View {
-        HStack(spacing: 5) {
-            Keycap(key: key)
+        HStack(spacing: 4) {
+            Keycap(key: key, compact: true)
             Text(label)
         }
     }

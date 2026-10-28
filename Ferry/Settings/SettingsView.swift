@@ -22,6 +22,7 @@ struct SettingsView: View {
 
 private struct GeneralSettings: View {
     @AppStorage(Prefs.showMenuBarIcon) private var showMenuBarIcon = true
+    @AppStorage(Prefs.panelStyle) private var panelStyle = "cream"
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var language = AppLanguage.current
     private let launchLanguage = AppLanguage.current
@@ -35,6 +36,19 @@ private struct GeneralSettings: View {
                         try? enabled ? SMAppService.mainApp.register() : SMAppService.mainApp.unregister()
                     }
                 Toggle("Show menu bar icon", isOn: $showMenuBarIcon)
+            }
+
+            Section {
+                Picker("Appearance", selection: $panelStyle) {
+                    Text("Cream").tag("cream")
+                    if #available(macOS 26, *) {
+                        Text("Liquid Glass").tag("glass")
+                    }
+                }
+                .pickerStyle(.segmented)
+                Text("How the switcher and Dock previews look.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
 
             Section {

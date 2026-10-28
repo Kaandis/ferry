@@ -129,6 +129,16 @@
         }
       }
     },
+    "Appearance": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görünüm"
+          }
+        }
+      }
+    },
     "Apps you add here never appear in the switcher or Dock previews.": {
       "localizations": {
         "tr": {
@@ -165,6 +175,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pencereyi Kapat"
+          }
+        }
+      }
+    },
+    "Cream": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krem"
           }
         }
       }
@@ -359,6 +379,16 @@
         }
       }
     },
+    "How the switcher and Dock previews look.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switcher ve Dock önizlemelerinin görünümü."
+          }
+        }
+      }
+    },
     "Include hidden apps": {
       "localizations": {
         "tr": {
@@ -425,6 +455,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ferry'nin pencerelerini listelemesini, kısayolu yakalamasını ve bir pencereyi öne getirmesini sağlar."
+          }
+        }
+      }
+    },
+    "Liquid Glass": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liquid Glass"
           }
         }
       }

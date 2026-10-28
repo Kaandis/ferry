@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1 — 2026-10-28
+
+- Appearance: Harbor’s cream or Liquid Glass (macOS 26 and later), in Settings → General.
+- W, M, Q and H work while ⌥ is held, and search types plain letters on any keyboard layout.
+- Windows that apps keep around after you close them (Music, Calendar…) no longer show up as switchable windows.
+- Dock previews close the moment the pointer is on neither the Dock nor the preview.
+- Window pictures are more reliable: every window of the app you leave is pictured, Spaces you arrive on are pictured once they settle, and a stuck capture no longer blocks a window.
+- A smaller hint bar.
+- On Ferry’s own website, ⌥Tab goes to the page, so the demo works with Ferry installed.
+
 ## 1.0 — 2026-10-28
 
 First release.

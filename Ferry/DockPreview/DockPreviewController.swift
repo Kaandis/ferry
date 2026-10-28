@@ -60,6 +60,9 @@ final class DockPreviewController {
     private var isRunning = false
     private var defaultsToken: NSObjectProtocol?
     private var activationToken: NSObjectProtocol?
+    /// Pointer monitors that exist only while a preview is on screen.
+    private var pointerMonitors: [Any] = []
+    private var dockArea: CGRect = .zero
 
     func start() {
         model.onOpen = { [weak self] item in
@@ -67,7 +70,7 @@ final class DockPreviewController {
             WindowActions.focus(item)
         }
         model.onClose = { [weak self] item in self?.close(item) }
-        model.onPointerExit = { [weak self] in self?.scheduleHideCheck(after: 0.2) }
+        model.onPointerExit = { [weak self] in self?.checkPointer() }
         observer.onChange = { [weak self] hover in self?.hoverChanged(hover) }
         applyEnabled()
         defaultsToken = NotificationCenter.default.addObserver(
@@ -105,7 +108,8 @@ final class DockPreviewController {
         guard !isSuspended else { return }
         showWork?.cancel()
         guard let hover else {
-            scheduleHideCheck(after: 0.25)
+            // A short grace: the Dock briefly selects nothing between two icons.
+            scheduleHideCheck(after: 0.12)
             return
         }
         hideWork?.cancel()
@@ -167,6 +171,7 @@ final class DockPreviewController {
         hideGeneration += 1
         if !isShown {
             isShown = true
+            watchPointer()
             if let content = panel.contentView {
                 if !panel.isVisible { PanelMotion.setHidden(content, anchor: anchor(in: content), hiddenScale: 0.92, offset: hiddenOffset) }
                 panel.orderFrontRegardless()
@@ -174,6 +179,40 @@ final class DockPreviewController {
             }
         }
         ThumbnailCache.shared.refresh(items, olderThan: 2)
+    }
+
+    /// While a preview is up, follow the pointer: the Dock reports which icon
+    /// is hovered but not when the pointer leaves it, so this is how the
+    /// preview knows to go the moment you're neither on the Dock nor on it.
+    /// The monitors are removed as soon as the preview hides.
+    private func watchPointer() {
+        guard pointerMonitors.isEmpty else { return }
+        dockArea = observer.dockFrame.map { NSScreen.appKitRect(fromQuartz: $0) } ?? .zero
+        let handler: (NSEvent) -> Void = { [weak self] _ in
+            MainActor.assumeIsolated { self?.checkPointer() }
+        }
+        if let global = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .leftMouseDragged], handler: handler) {
+            pointerMonitors.append(global)
+        }
+        if let local = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved], handler: { event in
+            handler(event)
+            return event
+        }) {
+            pointerMonitors.append(local)
+        }
+    }
+
+    private func stopWatchingPointer() {
+        pointerMonitors.forEach(NSEvent.removeMonitor)
+        pointerMonitors.removeAll()
+    }
+
+    private func checkPointer() {
+        guard isShown else { return }
+        let point = NSEvent.mouseLocation
+        let onPreview = panel?.frame.contains(point) ?? false
+        let onDock = dockArea.insetBy(dx: -2, dy: -2).contains(point)
+        if !onPreview && !onDock { hide(animated: true) }
     }
 
     private func scheduleHideCheck(after delay: TimeInterval) {
@@ -192,6 +231,7 @@ final class DockPreviewController {
         hideWork?.cancel()
         guard isShown else { return }
         isShown = false
+        stopWatchingPointer()
         hideGeneration += 1
         let generation = hideGeneration
         guard animated, let content = panel?.contentView else {
@@ -254,10 +294,12 @@ final class DockPreviewController {
 
 private struct DockPreviewRoot: View {
     let model: DockPreviewModel
+    @AppStorage(Prefs.panelStyle) private var style = "cream"
 
     var body: some View {
         DockPreviewView(model: model, thumbnails: ThumbnailCache.shared,
                         showsPictures: Permissions.shared.screenRecording)
+            .environment(\.palette, .named(style))
             .padding(DockPreviewMetrics.margin)
     }
 }

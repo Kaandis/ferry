@@ -244,6 +244,13 @@ final class WindowStore {
         }
 
         let spaces = PrivateAPI.spaceInfo()
+        // Windows Accessibility didn't list must prove they're really shown somewhere.
+        let unlisted = list.compactMap { entry -> CGWindowID? in
+            guard entry[kCGWindowLayer as String] as? Int == 0,
+                  let id = entry[kCGWindowNumber as String] as? CGWindowID, ax[id] == nil else { return nil }
+            return id
+        }
+        let orderedIn = PrivateAPI.orderedIn(unlisted)
         var order = 0
         var ranked: [(Int, WindowItem)] = []
         for entry in list {
@@ -261,7 +268,8 @@ final class WindowStore {
             var info = ax[id]
             if info == nil {
                 // Not in the app's list: on another Space, or not a real window at all.
-                guard !windowSpaces.isEmpty, windowSpaces.allSatisfy({ !spaces.visible.contains($0) }) else { continue }
+                guard !windowSpaces.isEmpty, windowSpaces.allSatisfy({ !spaces.visible.contains($0) }),
+                      orderedIn?.contains(id) ?? true else { continue }
                 if let element = app.tokenWindows?[id] {
                     info = describe(element)
                 } else {
@@ -273,6 +281,7 @@ final class WindowStore {
                     guard !title.isEmpty else { continue }
                     var item = WindowItem(id: id, pid: pid, bundleID: app.bundleID, appName: app.name, title: title, frame: frame)
                     item.isOnScreen = false
+                    item.isConfirmed = false
                     item.otherSpace = windowSpaces.compactMap { spaces.numbers[$0] }.first
                     item.isFullScreen = windowSpaces.contains { spaces.fullScreen.contains($0) }
                     item.isAppHidden = app.isHidden

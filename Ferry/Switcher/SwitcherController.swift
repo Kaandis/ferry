@@ -84,7 +84,8 @@ final class SwitcherController {
         case .down:
             if phase == .idle {
                 guard key.code == KeyCode.tab,
-                      key.flags.intersection(Self.modifierMasks) == holdMask else { return false }
+                      key.flags.intersection(Self.modifierMasks) == holdMask,
+                      !isOwnWebsiteInFront() else { return false }
                 swallowedKeyUps.insert(key.code)
                 open(step: key.flags.contains(.maskShift) ? -1 : 1)
                 return true
@@ -134,6 +135,22 @@ final class SwitcherController {
         }
     }
 
+    /// Ferry's website has a demo that answers to ⌥Tab itself. When that page
+    /// is in front, Ferry lets the shortcut through so the demo can be tried
+    /// with Ferry installed. Checked only when the shortcut is pressed.
+    private func isOwnWebsiteInFront() -> Bool {
+        guard let pid = NSWorkspace.shared.frontmostApplication?.processIdentifier else { return false }
+        let app = AXUIElementCreateApplication(pid)
+        AXUIElementSetMessagingTimeout(app, 0.05)
+        var window: CFTypeRef?
+        var title: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(app, kAXFocusedWindowAttribute as CFString, &window) == .success,
+              let window, CFGetTypeID(window) == AXUIElementGetTypeID(),
+              AXUIElementCopyAttributeValue(window as! AXUIElement, kAXTitleAttribute as CFString, &title) == .success
+        else { return false }
+        return (title as? String)?.hasPrefix("Ferry — ") ?? false
+    }
+
     // MARK: Flow
 
     private func open(step: Int) {
@@ -171,7 +188,7 @@ final class SwitcherController {
         log.notice("Switcher got \(items.count) windows \(Int(Date().timeIntervalSince(self.openedAt) * 1000)) ms after the shortcut")
         #if DEBUG
         for item in items {
-            log.notice("  \(item.id) \(item.appName): \(item.title) onScreen=\(item.isOnScreen) min=\(item.isMinimized) space=\(item.otherSpace ?? 0)")
+            log.notice("  \(item.id) \(item.appName, privacy: .public): \(item.title, privacy: .public) onScreen=\(item.isOnScreen) min=\(item.isMinimized) hidden=\(item.isAppHidden) full=\(item.isFullScreen) space=\(item.otherSpace ?? 0) ax=\(item.isConfirmed) \(Int(item.frame.width))x\(Int(item.frame.height))")
         }
         #endif
         let kept = model.selectedID
@@ -308,6 +325,9 @@ extension SwitcherController {
         case "commit": commit()
         case "cancel": dismiss()
         case "search": animate(.harborPresent) { model.isSearching = true }
+        case _ where command.hasPrefix("key:"):
+            // A key pressed while ⌥ is held, by virtual key code.
+            if let code = Int64(command.dropFirst(4)) { handleWhileOpen(HotkeyTap.Key(code: code, flags: .maskAlternate)) }
         default:
             if command.hasPrefix("type:") {
                 model.query += command.dropFirst(5)
@@ -321,9 +341,11 @@ extension SwitcherController {
 /// Reads permission and picture state so the view updates when either changes.
 private struct SwitcherRoot: View {
     let model: SwitcherModel
+    @AppStorage(Prefs.panelStyle) private var style = "cream"
 
     var body: some View {
         SwitcherView(model: model, thumbnails: ThumbnailCache.shared,
                      showsPictures: Permissions.shared.screenRecording)
+            .environment(\.palette, .named(style))
     }
 }

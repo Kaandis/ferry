@@ -69,6 +69,19 @@ final class DockObserver {
         list = nil
     }
 
+    /// The Dock's icon strip in Quartz coordinates, read on demand.
+    var dockFrame: CGRect? {
+        guard let list else { return nil }
+        var origin = CGPoint.zero
+        var size = CGSize.zero
+        guard let position = attribute(list, kAXPositionAttribute), CFGetTypeID(position as CFTypeRef) == AXValueGetTypeID(),
+              let extent = attribute(list, kAXSizeAttribute), CFGetTypeID(extent as CFTypeRef) == AXValueGetTypeID()
+        else { return nil }
+        AXValueGetValue(position as! AXValue, .cgPoint, &origin)
+        AXValueGetValue(extent as! AXValue, .cgSize, &size)
+        return CGRect(origin: origin, size: size)
+    }
+
     fileprivate func selectionChanged() {
         onChange?(currentHover())
     }

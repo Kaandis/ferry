@@ -4,6 +4,7 @@ import SwiftUI
 /// A window's picture, or its app icon on a soft card when there's no picture
 /// (no Screen Recording permission, or a minimized window seen for the first time).
 struct WindowThumbnail: View {
+    @Environment(\.palette) private var palette
     let item: WindowItem
     let image: CGImage?
     let size: CGSize
@@ -21,7 +22,7 @@ struct WindowThumbnail: View {
                     .overlay(alignment: .topTrailing) { StatusBadges(item: item).padding(6) }
             } else {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(Theme.raised)
+                    .fill(palette.raised)
                     .overlay(
                         Image(nsImage: AppIcons.icon(for: item.pid))
                             .resizable()
@@ -37,6 +38,7 @@ struct WindowThumbnail: View {
 /// Small chips for windows that aren't simply on screen: minimized, hidden,
 /// full screen or on another Space.
 struct StatusBadges: View {
+    @Environment(\.palette) private var palette
     let item: WindowItem
 
     var body: some View {
@@ -57,11 +59,11 @@ struct StatusBadges: View {
             Image(systemName: symbol).font(.system(size: 9, weight: .bold))
             if let text { Text(text).font(.system(size: 10, weight: .semibold)).monospacedDigit() }
         }
-        .foregroundStyle(Theme.ink)
+        .foregroundStyle(palette.ink)
         .padding(.horizontal, 6)
         .frame(height: 18)
-        .background(Capsule().fill(Theme.card.opacity(0.94)))
-        .overlay(Capsule().strokeBorder(Theme.hairline))
+        .background(Capsule().fill(palette.card.opacity(0.94)))
+        .overlay(Capsule().strokeBorder(palette.hairline))
         .help(label)
         .accessibilityLabel(label)
     }
@@ -69,16 +71,18 @@ struct StatusBadges: View {
 
 /// A key as printed on a keyboard, for hints.
 struct Keycap: View {
+    @Environment(\.palette) private var palette
     let key: String
+    var compact = false
 
     var body: some View {
         Text(key)
-            .font(.system(size: 10.5, weight: .semibold))
-            .foregroundStyle(Theme.ink2)
-            .padding(.horizontal, 5)
-            .frame(minWidth: 18, minHeight: 18)
-            .background(RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Theme.card))
-            .overlay(RoundedRectangle(cornerRadius: 5, style: .continuous).strokeBorder(Theme.hairline))
+            .font(.system(size: compact ? 9 : 10.5, weight: .semibold))
+            .foregroundStyle(palette.ink2)
+            .padding(.horizontal, compact ? 4 : 5)
+            .frame(minWidth: compact ? 15 : 18, minHeight: compact ? 15 : 18)
+            .background(RoundedRectangle(cornerRadius: compact ? 4 : 5, style: .continuous).fill(palette.card))
+            .overlay(RoundedRectangle(cornerRadius: compact ? 4 : 5, style: .continuous).strokeBorder(palette.hairline))
     }
 }
 

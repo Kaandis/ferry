@@ -5,6 +5,8 @@ import Foundation
 /// Harbor hub can render these settings later.
 enum Prefs {
     static let showMenuBarIcon = "showMenuBarIcon"
+    /// Panel look: "cream" (Harbor's own) or "glass" (Liquid Glass, macOS 26+).
+    static let panelStyle = "panelStyle"
     /// The key held while pressing Tab: "option", "command" or "control".
     static let switcherModifier = "switcherModifier"
     /// "all" or "current" Space.
@@ -24,6 +26,7 @@ enum Prefs {
     static func registerDefaults() {
         UserDefaults.standard.register(defaults: [
             showMenuBarIcon: true,
+            panelStyle: "cream",
             switcherModifier: "option",
             switcherSpaces: "all",
             switcherDisplays: "all",

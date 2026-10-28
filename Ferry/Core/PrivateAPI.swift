@@ -19,6 +19,11 @@ enum PrivateAPI {
     private typealias PostEventFn = @convention(c) (UnsafeMutablePointer<ProcessSerialNumber>, UnsafeMutablePointer<UInt8>) -> Int32
     private typealias ProcessForPIDFn = @convention(c) (pid_t, UnsafeMutablePointer<ProcessSerialNumber>) -> OSStatus
     private typealias SymbolicHotKeyFn = @convention(c) (Int32, Bool) -> Int32
+    private typealias QueryWindowsFn = @convention(c) (Int32, CFArray, Int32) -> Unmanaged<CFTypeRef>?
+    private typealias QueryResultFn = @convention(c) (CFTypeRef) -> Unmanaged<CFTypeRef>?
+    private typealias IteratorAdvanceFn = @convention(c) (CFTypeRef) -> Bool
+    private typealias IteratorIDFn = @convention(c) (CFTypeRef) -> UInt32
+    private typealias IteratorBitsFn = @convention(c) (CFTypeRef) -> UInt64
 
     private static let skyLight = dlopen("/System/Library/PrivateFrameworks/SkyLight.framework/Versions/A/SkyLight", RTLD_LAZY)
     private static let defaultHandle = UnsafeMutableRawPointer(bitPattern: -2) // RTLD_DEFAULT
@@ -38,6 +43,12 @@ enum PrivateAPI {
     private static let postEvent = symbol("SLPSPostEventRecordTo", in: skyLight, as: PostEventFn.self)
     private static let symbolicHotKey = symbol("SLSSetSymbolicHotKeyEnabled", in: skyLight, as: SymbolicHotKeyFn.self)
         ?? symbol("CGSSetSymbolicHotKeyEnabled", in: defaultHandle, as: SymbolicHotKeyFn.self)
+
+    private static let queryWindows = symbol("SLSWindowQueryWindows", in: skyLight, as: QueryWindowsFn.self)
+    private static let queryResult = symbol("SLSWindowQueryResultCopyWindows", in: skyLight, as: QueryResultFn.self)
+    private static let iteratorAdvance = symbol("SLSWindowIteratorAdvance", in: skyLight, as: IteratorAdvanceFn.self)
+    private static let iteratorWindowID = symbol("SLSWindowIteratorGetWindowID", in: skyLight, as: IteratorIDFn.self)
+    private static let iteratorAttributes = symbol("SLSWindowIteratorGetAttributes", in: skyLight, as: IteratorBitsFn.self)
 
     private static let connection: Int32 = mainConnection?() ?? 0
 
@@ -71,6 +82,25 @@ enum PrivateAPI {
             }
         }
         return found
+    }
+
+    /// The windows among `ids` that are actually ordered in on some Space.
+    ///
+    /// Apps keep closed windows around (Music and Calendar do), and those
+    /// still report a Space. WindowServer marks windows that are really
+    /// shown with attribute bit 0x2. Returns nil if the query isn't available.
+    static func orderedIn(_ ids: [CGWindowID]) -> Set<CGWindowID>? {
+        guard !ids.isEmpty else { return [] }
+        guard let queryWindows, let queryResult, let iteratorAdvance, let iteratorWindowID, let iteratorAttributes,
+              let query = queryWindows(connection, ids.map { NSNumber(value: $0) } as CFArray, Int32(ids.count))?
+                .takeRetainedValue(),
+              let iterator = queryResult(query)?.takeRetainedValue()
+        else { return nil }
+        var shown: Set<CGWindowID> = []
+        while iteratorAdvance(iterator) {
+            if iteratorAttributes(iterator) & 0x2 != 0 { shown.insert(iteratorWindowID(iterator)) }
+        }
+        return shown
     }
 
     // MARK: Spaces

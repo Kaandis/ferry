@@ -25,7 +25,7 @@
     'lock.unlock': 'Kilidi açmak için tıkla',
     'lock.unlockNote': 'şifre yok, söz',
     'sw.empty': 'Eşleşen pencere yok',
-    'demo.hint': 'Kilidi aç, sonra <kbd>⌥</kbd>’ye basılı tutup <kbd>Tab</kbd>’a dokun. Klavye yok mu? Düğmeyi kullan.',
+    'demo.hint': 'Kilidi aç, sonra <kbd>⌥</kbd>’ye basılı tutup <kbd>Tab</kbd>’a dokun. Klavye yok mu? Düğmeyi kullan. Ferry zaten açık mı? Bu sayfada kenara çekilir.',
     'demo.try': 'Değiştir',
     'features.title': 'Pencere değiştirmenin olması gerektiği hali.',
     'f1.t': 'Uygulama değil, pencere', 'f1.d': 'Üç Safari penceresi tek değil, üç seçenek.',

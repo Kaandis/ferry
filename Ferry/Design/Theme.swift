@@ -46,6 +46,35 @@ extension NSColor {
     }
 }
 
+/// The colours a floating panel draws with. Cream is Harbor's own look;
+/// Liquid Glass hands the surface to the system and switches text to
+/// vibrant system colours so it reads over any wallpaper.
+struct Palette {
+    var isGlass = false
+    var ink = Theme.ink
+    var ink2 = Theme.ink2
+    var ink3 = Theme.ink3
+    var card = Theme.card
+    var raised = Theme.raised
+    var hairline = Theme.hairline
+
+    static let cream = Palette()
+    static let glass = Palette(isGlass: true,
+                               ink: .primary,
+                               ink2: .secondary,
+                               ink3: Color(nsColor: .tertiaryLabelColor),
+                               card: Color.primary.opacity(0.07),
+                               raised: Color.primary.opacity(0.06),
+                               hairline: Color.primary.opacity(0.1))
+
+    /// Liquid Glass needs macOS 26; earlier systems keep the cream panel.
+    static func named(_ style: String) -> Palette {
+        if #available(macOS 26, *), style == "glass" { return .glass }
+        return .cream
+    }
+}
+
+private struct PaletteKey: EnvironmentKey { static let defaultValue = Palette.cream }
 private struct StaticRenderKey: EnvironmentKey { static let defaultValue = false }
 
 extension EnvironmentValues {
@@ -55,21 +84,30 @@ extension EnvironmentValues {
         get { self[StaticRenderKey.self] }
         set { self[StaticRenderKey.self] = newValue }
     }
+
+    var palette: Palette {
+        get { self[PaletteKey.self] }
+        set { self[PaletteKey.self] = newValue }
+    }
 }
 
-/// A floating Harbor surface: system glass under a cream tint, solid when the
-/// user asks for less transparency, outlined when they ask for more contrast.
+/// A floating Harbor surface: system glass under a cream tint, or Liquid
+/// Glass if chosen. Solid when the user asks for less transparency, outlined
+/// when they ask for more contrast.
 struct HarborSurface: View {
     var cornerRadius: CGFloat
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.colorSchemeContrast) private var contrast
     @Environment(\.isStaticRender) private var isStaticRender
+    @Environment(\.palette) private var palette
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         ZStack {
             if reduceTransparency || isStaticRender {
-                shape.fill(Theme.background)
+                shape.fill(palette.isGlass ? Color(nsColor: .windowBackgroundColor) : Theme.background)
+            } else if palette.isGlass, #available(macOS 26, *) {
+                LiquidGlass(cornerRadius: cornerRadius)
             } else {
                 VisualEffectBlur()
                     .clipShape(shape)
@@ -77,7 +115,7 @@ struct HarborSurface: View {
             }
         }
         .overlay(
-            shape.strokeBorder(contrast == .increased ? Theme.ink2 : Theme.hairline,
+            shape.strokeBorder(contrast == .increased ? palette.ink2 : palette.hairline,
                                lineWidth: contrast == .increased ? 1.5 : 1)
         )
     }
@@ -93,4 +131,20 @@ private struct VisualEffectBlur: NSViewRepresentable {
     }
 
     func updateNSView(_ view: NSVisualEffectView, context: Context) {}
+}
+
+/// AppKit's Liquid Glass view, as a panel background.
+@available(macOS 26, *)
+private struct LiquidGlass: NSViewRepresentable {
+    var cornerRadius: CGFloat
+
+    func makeNSView(context: Context) -> NSGlassEffectView {
+        let view = NSGlassEffectView()
+        view.cornerRadius = cornerRadius
+        return view
+    }
+
+    func updateNSView(_ view: NSGlassEffectView, context: Context) {
+        view.cornerRadius = cornerRadius
+    }
 }

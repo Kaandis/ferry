@@ -11,43 +11,133 @@
   "groups": [
     {
       "id": "general",
-      "title": { "en": "General", "tr": "Genel" },
+      "title": {
+        "en": "General",
+        "tr": "Genel"
+      },
       "settings": [
         {
           "key": "showMenuBarIcon",
           "type": "bool",
           "default": true,
-          "title": { "en": "Show menu bar icon", "tr": "Menü çubuğu simgesini göster" }
+          "title": {
+            "en": "Show menu bar icon",
+            "tr": "Menü çubuğu simgesini göster"
+          }
+        },
+        {
+          "key": "panelStyle",
+          "type": "enum",
+          "default": "cream",
+          "options": [
+            {
+              "value": "cream",
+              "title": {
+                "en": "Cream",
+                "tr": "Krem"
+              }
+            },
+            {
+              "value": "glass",
+              "title": {
+                "en": "Liquid Glass",
+                "tr": "Liquid Glass"
+              },
+              "requires": {
+                "macOS": "26.0"
+              }
+            }
+          ],
+          "title": {
+            "en": "Appearance",
+            "tr": "Görünüm"
+          },
+          "description": {
+            "en": "How the switcher and Dock previews look.",
+            "tr": "Switcher ve Dock önizlemelerinin görünümü."
+          }
         },
         {
           "key": "AppleLanguages",
           "type": "language",
           "default": null,
           "options": [
-            { "value": null, "title": { "en": "System", "tr": "Sistem" } },
-            { "value": ["en"], "title": { "en": "English", "tr": "English" } },
-            { "value": ["tr"], "title": { "en": "Türkçe", "tr": "Türkçe" } }
+            {
+              "value": null,
+              "title": {
+                "en": "System",
+                "tr": "Sistem"
+              }
+            },
+            {
+              "value": [
+                "en"
+              ],
+              "title": {
+                "en": "English",
+                "tr": "English"
+              }
+            },
+            {
+              "value": [
+                "tr"
+              ],
+              "title": {
+                "en": "Türkçe",
+                "tr": "Türkçe"
+              }
+            }
           ],
           "restartRequired": true,
-          "title": { "en": "Language", "tr": "Dil" },
-          "description": { "en": "Remove the key to follow the system language.", "tr": "Sistem dilini izlemek için anahtarı kaldır." }
+          "title": {
+            "en": "Language",
+            "tr": "Dil"
+          },
+          "description": {
+            "en": "Remove the key to follow the system language.",
+            "tr": "Sistem dilini izlemek için anahtarı kaldır."
+          }
         }
       ]
     },
     {
       "id": "switcher",
-      "title": { "en": "Switcher", "tr": "Switcher" },
+      "title": {
+        "en": "Switcher",
+        "tr": "Switcher"
+      },
       "settings": [
         {
           "key": "switcherModifier",
           "type": "enum",
           "default": "option",
           "options": [
-            { "value": "option", "title": { "en": "⌥ Option + Tab", "tr": "⌥ Option + Tab" } },
-            { "value": "command", "title": { "en": "⌘ Command + Tab", "tr": "⌘ Command + Tab" } },
-            { "value": "control", "title": { "en": "⌃ Control + Tab", "tr": "⌃ Control + Tab" } }
+            {
+              "value": "option",
+              "title": {
+                "en": "⌥ Option + Tab",
+                "tr": "⌥ Option + Tab"
+              }
+            },
+            {
+              "value": "command",
+              "title": {
+                "en": "⌘ Command + Tab",
+                "tr": "⌘ Command + Tab"
+              }
+            },
+            {
+              "value": "control",
+              "title": {
+                "en": "⌃ Control + Tab",
+                "tr": "⌃ Control + Tab"
+              }
+            }
           ],
-          "title": { "en": "Shortcut", "tr": "Kısayol" },
+          "title": {
+            "en": "Shortcut",
+            "tr": "Kısayol"
+          },
           "description": {
             "en": "With ⌘, Ferry replaces the system’s ⌘Tab while it runs and hands it back when it quits.",
             "tr": "⌘ seçilirse Ferry çalışırken sistemin ⌘Tab'ının yerini alır, çıkınca geri verir."
@@ -58,54 +148,111 @@
           "type": "enum",
           "default": "mouse",
           "options": [
-            { "value": "mouse", "title": { "en": "Display with the pointer", "tr": "İmlecin olduğu ekran" } },
-            { "value": "active", "title": { "en": "Display with the active window", "tr": "Etkin pencerenin olduğu ekran" } }
+            {
+              "value": "mouse",
+              "title": {
+                "en": "Display with the pointer",
+                "tr": "İmlecin olduğu ekran"
+              }
+            },
+            {
+              "value": "active",
+              "title": {
+                "en": "Display with the active window",
+                "tr": "Etkin pencerenin olduğu ekran"
+              }
+            }
           ],
-          "title": { "en": "Show on", "tr": "Göründüğü yer" }
+          "title": {
+            "en": "Show on",
+            "tr": "Göründüğü yer"
+          }
         },
         {
           "key": "switcherSpaces",
           "type": "enum",
           "default": "all",
           "options": [
-            { "value": "all", "title": { "en": "All Spaces", "tr": "Tüm Space'ler" } },
-            { "value": "current", "title": { "en": "Current Space", "tr": "Bu Space" } }
+            {
+              "value": "all",
+              "title": {
+                "en": "All Spaces",
+                "tr": "Tüm Space'ler"
+              }
+            },
+            {
+              "value": "current",
+              "title": {
+                "en": "Current Space",
+                "tr": "Bu Space"
+              }
+            }
           ],
-          "title": { "en": "Windows from", "tr": "Pencere kaynağı" }
+          "title": {
+            "en": "Windows from",
+            "tr": "Pencere kaynağı"
+          }
         },
         {
           "key": "switcherDisplays",
           "type": "enum",
           "default": "all",
           "options": [
-            { "value": "all", "title": { "en": "All displays", "tr": "Tüm ekranlar" } },
-            { "value": "current", "title": { "en": "Only the display it opens on", "tr": "Yalnızca açıldığı ekran" } }
+            {
+              "value": "all",
+              "title": {
+                "en": "All displays",
+                "tr": "Tüm ekranlar"
+              }
+            },
+            {
+              "value": "current",
+              "title": {
+                "en": "Only the display it opens on",
+                "tr": "Yalnızca açıldığı ekran"
+              }
+            }
           ],
-          "title": { "en": "Displays", "tr": "Ekranlar" }
+          "title": {
+            "en": "Displays",
+            "tr": "Ekranlar"
+          }
         },
         {
           "key": "showMinimized",
           "type": "bool",
           "default": true,
-          "title": { "en": "Include minimized windows", "tr": "Küçültülmüş pencereleri de göster" }
+          "title": {
+            "en": "Include minimized windows",
+            "tr": "Küçültülmüş pencereleri de göster"
+          }
         },
         {
           "key": "showHidden",
           "type": "bool",
           "default": true,
-          "title": { "en": "Include hidden apps", "tr": "Gizlenmiş uygulamaları da göster" }
+          "title": {
+            "en": "Include hidden apps",
+            "tr": "Gizlenmiş uygulamaları da göster"
+          }
         }
       ]
     },
     {
       "id": "dock",
-      "title": { "en": "Dock", "tr": "Dock" },
+      "title": {
+        "en": "Dock",
+        "tr": "Dock"
+      },
       "settings": [
         {
           "key": "dockPreviewsEnabled",
           "type": "bool",
           "default": true,
-          "title": { "en": "Show windows when hovering a Dock icon", "tr": "Dock simgesinin üzerine gelince pencereleri göster" }
+          "title": {
+            "en": "Show windows when hovering a Dock icon",
+            "tr": "Dock simgesinin üzerine gelince pencereleri göster"
+          }
         },
         {
           "key": "dockPreviewDelay",
@@ -115,21 +262,32 @@
           "max": 1,
           "step": 0.05,
           "unit": "seconds",
-          "visibleWhen": { "dockPreviewsEnabled": true },
-          "title": { "en": "Delay", "tr": "Gecikme" }
+          "visibleWhen": {
+            "dockPreviewsEnabled": true
+          },
+          "title": {
+            "en": "Delay",
+            "tr": "Gecikme"
+          }
         }
       ]
     },
     {
       "id": "excluded",
-      "title": { "en": "Excluded Apps", "tr": "Hariç Tutulanlar" },
+      "title": {
+        "en": "Excluded Apps",
+        "tr": "Hariç Tutulanlar"
+      },
       "settings": [
         {
           "key": "excludedApps",
           "type": "appList",
           "itemType": "bundleIdentifier",
           "default": [],
-          "title": { "en": "Excluded apps", "tr": "Hariç tutulan uygulamalar" },
+          "title": {
+            "en": "Excluded apps",
+            "tr": "Hariç tutulan uygulamalar"
+          },
           "description": {
             "en": "Apps listed here never appear in the switcher or Dock previews.",
             "tr": "Buradaki uygulamalar switcher'da ve Dock önizlemelerinde hiç görünmez."

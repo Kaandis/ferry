@@ -5,10 +5,11 @@ import ScreenCaptureKit
 /// Window pictures, captured with ScreenCaptureKit only when something is
 /// about to show them, then kept until the window goes away.
 ///
-/// Captures happen at three moments: when the switcher opens (windows on
-/// screen now), when a Dock preview opens (that app's windows), and when you
-/// leave an app (the window you were looking at), which keeps pictures of
-/// windows on other Spaces fresh without ever polling.
+/// Captures happen when the switcher opens (windows on screen now), when a
+/// Dock preview opens (that app's windows), when you leave an app (its
+/// windows, still on screen) and shortly after you arrive on another Space.
+/// macOS can't picture windows that aren't on screen, so these moments keep
+/// pictures of windows elsewhere fresh without ever polling.
 @MainActor
 @Observable
 final class ThumbnailCache {
@@ -17,8 +18,12 @@ final class ThumbnailCache {
     private(set) var images: [CGWindowID: CGImage] = [:]
     @ObservationIgnored private var capturedAt: [CGWindowID: Date] = [:]
     @ObservationIgnored private var scWindows: [CGWindowID: SCWindow] = [:]
-    @ObservationIgnored private var inFlight: Set<CGWindowID> = []
+    /// Captures under way and when they started; a capture that never returns
+    /// stops counting after a few seconds instead of blocking that window forever.
+    @ObservationIgnored private var inFlight: [CGWindowID: Date] = [:]
     @ObservationIgnored private var activationToken: NSObjectProtocol?
+    @ObservationIgnored private var spaceToken: NSObjectProtocol?
+    @ObservationIgnored private var spaceWork: DispatchWorkItem?
     @ObservationIgnored private var frontPID: pid_t?
 
     /// Longest side of a stored picture, in pixels. Tiles are at most ~260 pt
@@ -35,10 +40,29 @@ final class ThumbnailCache {
             let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
             MainActor.assumeIsolated { self?.appDidActivate(app) }
         }
+        spaceToken = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated { self?.spaceDidChange() }
+        }
         // Picture what's on screen now, so the first switch already has pictures.
+        refreshVisible(olderThan: 0)
+    }
+
+    /// Once the Space animation has settled, picture the windows that are now
+    /// on screen; they're the ones that will be "elsewhere" next.
+    private func spaceDidChange() {
+        spaceWork?.cancel()
+        let work = DispatchWorkItem { [weak self] in self?.refreshVisible(olderThan: 10) }
+        spaceWork = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: work)
+    }
+
+    private func refreshVisible(olderThan age: TimeInterval) {
+        guard Permissions.shared.screenRecording else { return }
         WindowStore.shared.snapshot(.init(allSpaces: false, includeMinimized: false, includeHidden: false,
                                           lookUpOtherSpaces: false)) { [weak self] items in
-            self?.refresh(items)
+            self?.refresh(items, olderThan: age)
         }
     }
 
@@ -49,8 +73,7 @@ final class ThumbnailCache {
               Permissions.shared.screenRecording else { return }
         WindowStore.shared.snapshot(.init(allSpaces: false, includeMinimized: false, includeHidden: false,
                                           onlyPID: previous, lookUpOtherSpaces: false)) { [weak self] items in
-            guard let first = items.first(where: \.isOnScreen) else { return }
-            self?.refresh([first], olderThan: 20)
+            self?.refresh(items.filter(\.isOnScreen), olderThan: 10)
         }
     }
 
@@ -60,11 +83,12 @@ final class ThumbnailCache {
         guard Permissions.shared.screenRecording else { return }
         let now = Date()
         let targets = items.filter { item in
-            item.isOnScreen && !item.isMinimized && !inFlight.contains(item.id)
+            item.isOnScreen && !item.isMinimized
+                && now.timeIntervalSince(inFlight[item.id] ?? .distantPast) > 3
                 && now.timeIntervalSince(capturedAt[item.id] ?? .distantPast) > maxAge
         }
         guard !targets.isEmpty else { return }
-        inFlight.formUnion(targets.map(\.id))
+        targets.forEach { inFlight[$0.id] = now }
 
         Task {
             let windows = await shareableWindows(for: Set(targets.map(\.id)))
@@ -77,10 +101,13 @@ final class ThumbnailCache {
                     if let image {
                         images[id] = image
                         capturedAt[id] = Date()
+                    } else {
+                        // A stale handle (the window moved display, or was recreated): fetch afresh next time.
+                        scWindows[id] = nil
                     }
                 }
             }
-            inFlight.subtract(targets.map(\.id))
+            targets.forEach { inFlight[$0.id] = nil }
             trim()
         }
     }

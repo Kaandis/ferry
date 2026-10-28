@@ -1,4 +1,5 @@
 import AppKit
+import Carbon.HIToolbox
 import CoreGraphics
 
 /// Listens to keyboard events only (key down, key up, modifier changes) and
@@ -9,17 +10,26 @@ final class HotkeyTap {
     struct Key {
         let code: Int64
         let flags: CGEventFlags
-        fileprivate let event: CGEvent
 
-        /// Typed characters without ⌥/⌃/⌘, so holding ⌥ doesn't turn "a" into "å".
+        /// What the key types on the current keyboard layout without ⌥, ⌃ or ⌘
+        /// (Shift kept), so holding ⌥ gives "w" rather than "∑". The event's own
+        /// string was made with ⌥ applied, so it's translated again here.
         /// Computed on demand: most keystrokes never need it.
         var characters: String {
-            guard let plain = event.copy() else { return "" }
-            plain.flags = event.flags.intersection(.maskShift)
+            guard let source = TISCopyCurrentKeyboardLayoutInputSource()?.takeRetainedValue(),
+                  let raw = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
+            else { return "" }
+            let data = Unmanaged<CFData>.fromOpaque(raw).takeUnretainedValue() as Data
+            let modifiers: UInt32 = flags.contains(.maskShift) ? UInt32(shiftKey >> 8) : 0
+            var deadKeys: UInt32 = 0
             var length = 0
             var buffer = [UniChar](repeating: 0, count: 4)
-            plain.keyboardGetUnicodeString(maxStringLength: 4, actualStringLength: &length, unicodeString: &buffer)
-            return String(utf16CodeUnits: buffer, count: length)
+            let status = data.withUnsafeBytes { bytes -> OSStatus in
+                guard let layout = bytes.baseAddress?.assumingMemoryBound(to: UCKeyboardLayout.self) else { return -1 }
+                return UCKeyTranslate(layout, UInt16(code), UInt16(kUCKeyActionDown), modifiers, UInt32(LMGetKbdType()),
+                                      OptionBits(kUCKeyTranslateNoDeadKeysBit), &deadKeys, 4, &length, &buffer)
+            }
+            return status == noErr ? String(utf16CodeUnits: buffer, count: length) : ""
         }
     }
 
@@ -69,7 +79,7 @@ final class HotkeyTap {
         case .keyDown, .keyUp, .flagsChanged:
             let kind: Kind = type == .keyDown ? .down : type == .keyUp ? .up : .modifiers
             let code = event.getIntegerValueField(.keyboardEventKeycode)
-            return handler?(kind, Key(code: code, flags: event.flags, event: event)) ?? false
+            return handler?(kind, Key(code: code, flags: event.flags)) ?? false
         default:
             return false
         }

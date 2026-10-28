@@ -15,6 +15,8 @@ struct WindowItem: Identifiable, Equatable {
     /// Mission Control number of the Space it lives on, when that isn't a Space on screen now.
     var otherSpace: Int?
     var isOnScreen = true
+    /// Whether Accessibility vouched for this window (it has an AX element).
+    var isConfirmed = true
 
     /// What the tile's caption says: the window title, or the app name for untitled windows.
     var displayTitle: String { title.isEmpty ? appName : title }
