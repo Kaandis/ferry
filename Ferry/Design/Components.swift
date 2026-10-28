@@ -95,18 +95,18 @@ struct PressableStyle: ButtonStyle {
     }
 }
 
-/// The primary Harbor button: coral fill, cream text.
+/// The primary Harbor button: ink fill, cream text.
 struct HarborButtonStyle: ButtonStyle {
     var prominent = true
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.system(size: 13, weight: .semibold))
-            .foregroundStyle(prominent ? Color.white : Theme.ink)
+            .foregroundStyle(prominent ? Theme.background : Theme.ink)
             .padding(.horizontal, 14)
             .frame(height: 30)
             .background(
-                Capsule().fill(prominent ? Theme.coralText : Theme.card)
+                Capsule().fill(prominent ? Theme.ink : Theme.card)
                     .overlay(Capsule().strokeBorder(prominent ? Color.clear : Theme.hairline))
             )
             .brightness(configuration.isPressed ? -0.06 : 0)

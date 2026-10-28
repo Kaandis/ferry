@@ -2,7 +2,7 @@
 
 ## 1.1 — 2026-10-28
 
-- Appearance: Harbor’s cream or Liquid Glass (macOS 26 and later), in Settings → General.
+- Appearance: Harbor’s cream or Liquid Glass (macOS 26 and later), and a highlight colour for the selection: pebble grey by default, or sky, mint, lilac, sun, coral, graphite or the system accent. Both in Settings → General.
 - W, M, Q and H work while ⌥ is held, and search types plain letters on any keyboard layout.
 - Windows that apps keep around after you close them (Music, Calendar…) no longer show up as switchable windows.
 - Dock previews close the moment the pointer is on neither the Dock nor the preview.

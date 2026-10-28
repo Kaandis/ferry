@@ -58,6 +58,77 @@
           }
         },
         {
+          "key": "accentColor",
+          "type": "enum",
+          "default": "pebble",
+          "options": [
+            {
+              "value": "pebble",
+              "title": {
+                "en": "Pebble",
+                "tr": "Çakıl"
+              }
+            },
+            {
+              "value": "sky",
+              "title": {
+                "en": "Sky",
+                "tr": "Gök"
+              }
+            },
+            {
+              "value": "mint",
+              "title": {
+                "en": "Mint",
+                "tr": "Nane"
+              }
+            },
+            {
+              "value": "lilac",
+              "title": {
+                "en": "Lilac",
+                "tr": "Leylak"
+              }
+            },
+            {
+              "value": "sun",
+              "title": {
+                "en": "Sun",
+                "tr": "Güneş"
+              }
+            },
+            {
+              "value": "coral",
+              "title": {
+                "en": "Coral",
+                "tr": "Mercan"
+              }
+            },
+            {
+              "value": "graphite",
+              "title": {
+                "en": "Graphite",
+                "tr": "Grafit"
+              }
+            },
+            {
+              "value": "system",
+              "title": {
+                "en": "System",
+                "tr": "Sistem"
+              }
+            }
+          ],
+          "title": {
+            "en": "Highlight",
+            "tr": "Vurgu"
+          },
+          "description": {
+            "en": "The colour of the selection ring. “System” follows the macOS accent colour.",
+            "tr": "Seçim halkasının rengi. “Sistem”, macOS vurgu rengini izler."
+          }
+        },
+        {
           "key": "AppleLanguages",
           "type": "language",
           "default": null,

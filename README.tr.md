@@ -24,7 +24,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/assets/readme/demo-tr.gif" width="720" alt="Ferry ⌥Tab ile açılıyor, mercan renkli seçim pencereden pencereye kayıyor, sonra kapanıyor">
+  <img src="docs/assets/readme/demo-tr.gif" width="720" alt="Ferry ⌥Tab ile açılıyor, seçim halkası pencereden pencereye kayıyor, sonra kapanıyor">
 </p>
 
 ## Ne yapar
@@ -37,7 +37,7 @@
 | **Dock önizlemeleri** — imleci bir Dock simgesinin üzerinde tut, o uygulamanın pencerelerini gör. Birine tıklayıp öne getir ya da oradan kapat. | <img src="docs/assets/shots/tr/dock.png" width="420" alt="Dock önizlemesi"> |
 | **Görüntüsüz de çalışır** — Ekran Kaydı isteğe bağlı. İzin yoksa kutularda uygulama simgeleri görünür, gerisi aynen çalışır. | <img src="docs/assets/shots/tr/icons.png" width="420" alt="Uygulama simgeleriyle switcher"> |
 
-Ayrıca: **W** kapatır, **M** küçültür, **Q** uygulamadan çıkar, **H** uygulamayı gizler — bırakmadan. Ok tuşları ve fare de çalışır. ⌥Tab, ⌘Tab (Ferry devralır, çıkınca geri verir) ya da ⌃Tab kullanabilirsin. Paneller Harbor’ın kremi ya da Liquid Glass (macOS 26 ve sonrası) görünümünde olabilir; **Ayarlar → Genel → Görünüm**’den seçilir. İmlecin olduğu ekranda açılır; Hareketi Azalt, Saydamlığı Azalt ve Kontrastı Artır tercihlerine uyar; İngilizce ve Türkçe konuşur.
+Ayrıca: **W** kapatır, **M** küçültür, **Q** uygulamadan çıkar, **H** uygulamayı gizler — bırakmadan. Ok tuşları ve fare de çalışır. ⌥Tab, ⌘Tab (Ferry devralır, çıkınca geri verir) ya da ⌃Tab kullanabilirsin. Paneller Harbor’ın kremi ya da Liquid Glass (macOS 26 ve sonrası) görünümünde olabilir; seçim halkası da seçtiğin vurgu renginde olur (varsayılan yumuşak çakıl grisi). İkisi de **Ayarlar → Genel**’de. İmlecin olduğu ekranda açılır; Hareketi Azalt, Saydamlığı Azalt ve Kontrastı Artır tercihlerine uyar; İngilizce ve Türkçe konuşur.
 
 ## Neden böyle çalışıyor
 
@@ -46,7 +46,7 @@ Ayrıca: **W** kapatır, **M** küçültür, **Q** uygulamadan çıkar, **H** uy
 - **Görüntüler akış değil, tek kare.** ScreenCaptureKit her pencereden küçük, tek bir görüntü alır (uzun kenarı en fazla 560 px): switcher ya da bir Dock önizlemesi göstermek üzereyken ve bir uygulamadan ayrılırken. macOS başka Space’teki pencerelerin görüntüsünü vermediği için Ferry pencere ekrandayken aldığı son görüntüyü saklar.
 - **Diğer Space’lerdeki pencereler tahminsiz.** Pencerenin hangi Space’te olduğu WindowServer’dan, başlığı ve türü Erişilebilirlik’ten gelir. Uygulamalar kapatılan pencereleri saklar (Music ve Calendar böyle yapar) ve bunlar hâlâ bir Space bildirir; Ferry yalnızca WindowServer’ın gerçekten gösterildiğini söylediği pencereleri listeler. Başlıksız pencereler de Erişilebilirlik üzerinden doğrulanır; yardımcı pencereler araya karışmaz.
 - **Hızlı dokunuşta titreme yok.** Panel görünmeden önce 90 ms bekler. Hızlıca dokunup bırakırsan doğrudan önceki pencereye geçersin; sistemin kendi switcher’ı gibi.
-- **Zaman çizelgesi değil, yay.** Panel ve mercan seçim, olduğu yerden başlayan kritik sönümlü yaylarla hareket eder: yarıda geri çevirebilirsin, hiçbir şey sıçramaz. Panelin girişi ve çıkışı Core Animation’da çalışır, yani içerik bir kez çizilir. Hareketi Azalt açıksa sadece belirip kaybolur.
+- **Zaman çizelgesi değil, yay.** Panel ve seçim halkası, olduğu yerden başlayan kritik sönümlü yaylarla hareket eder: yarıda geri çevirebilirsin, hiçbir şey sıçramaz. Panelin girişi ve çıkışı Core Animation’da çalışır, yani içerik bir kez çizilir. Hareketi Azalt açıksa sadece belirip kaybolur.
 - **Dock önizlemeleri sen gidince gider.** Önizleme açıkken, yalnızca o sırada, Ferry imleci izler; imleç ne Dock’ta ne önizlemede olduğu an önizleme kapanır.
 - **Kendi web sitesinde kenara çekilir.** Öndeki sayfa Ferry’nin sitesiyse ⌥Tab sayfaya gider; böylece demo Ferry kuruluyken de çalışır.
 - **Çalışmak için bir izin, görüntüler için bir izin.** İkisi de karşılama penceresinde anlatılır; Sistem Ayarları’nda anahtarı açtığın anda durum güncellenir.

@@ -23,6 +23,7 @@ struct SettingsView: View {
 private struct GeneralSettings: View {
     @AppStorage(Prefs.showMenuBarIcon) private var showMenuBarIcon = true
     @AppStorage(Prefs.panelStyle) private var panelStyle = "cream"
+    @AppStorage(Prefs.accentColor) private var accentColor = "pebble"
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var language = AppLanguage.current
     private let launchLanguage = AppLanguage.current
@@ -46,6 +47,9 @@ private struct GeneralSettings: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                LabeledContent("Highlight") {
+                    AccentPicker(selection: $accentColor)
+                }
                 Text("How the switcher and Dock previews look.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -76,6 +80,30 @@ private struct GeneralSettings: View {
     }
 }
 
+/// A row of colour dots, one per highlight.
+private struct AccentPicker: View {
+    @Binding var selection: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            ForEach(Accent.all) { accent in
+                let selected = accent.id == selection
+                Button { selection = accent.id } label: {
+                    Circle()
+                        .fill(accent.color)
+                        .frame(width: 18, height: 18)
+                        .padding(3)
+                        .overlay(Circle().strokeBorder(selected ? Color.primary : .clear, lineWidth: 1.5))
+                }
+                .buttonStyle(PressableStyle())
+                .help(Text(accent.name))
+                .accessibilityLabel(Text(accent.name))
+                .accessibilityAddTraits(selected ? .isSelected : [])
+            }
+        }
+    }
+}
+
 private struct PermissionStatus: View {
     let title: LocalizedStringKey
     let granted: Bool
@@ -84,7 +112,7 @@ private struct PermissionStatus: View {
         LabeledContent(title) {
             Label(granted ? "Allowed" : "Not allowed",
                   systemImage: granted ? "checkmark.circle.fill" : "circle.dashed")
-                .foregroundStyle(granted ? Theme.coralText : .secondary)
+                .foregroundStyle(granted ? Color.primary : .secondary)
         }
     }
 }

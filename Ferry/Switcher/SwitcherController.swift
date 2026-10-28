@@ -342,10 +342,12 @@ extension SwitcherController {
 private struct SwitcherRoot: View {
     let model: SwitcherModel
     @AppStorage(Prefs.panelStyle) private var style = "cream"
+    @AppStorage(Prefs.accentColor) private var accent = "pebble"
 
     var body: some View {
         SwitcherView(model: model, thumbnails: ThumbnailCache.shared,
                      showsPictures: Permissions.shared.screenRecording)
             .environment(\.palette, .named(style))
+            .environment(\.accent, .named(accent))
     }
 }

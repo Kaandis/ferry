@@ -7,6 +7,8 @@ enum Prefs {
     static let showMenuBarIcon = "showMenuBarIcon"
     /// Panel look: "cream" (Harbor's own) or "glass" (Liquid Glass, macOS 26+).
     static let panelStyle = "panelStyle"
+    /// Selection colour: an `Accent` id ("pebble", "sky", "mint", "lilac", "sun", "coral", "graphite", "system").
+    static let accentColor = "accentColor"
     /// The key held while pressing Tab: "option", "command" or "control".
     static let switcherModifier = "switcherModifier"
     /// "all" or "current" Space.
@@ -27,6 +29,7 @@ enum Prefs {
         UserDefaults.standard.register(defaults: [
             showMenuBarIcon: true,
             panelStyle: "cream",
+            accentColor: "pebble",
             switcherModifier: "option",
             switcherSpaces: "all",
             switcherDisplays: "all",

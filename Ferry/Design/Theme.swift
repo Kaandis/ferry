@@ -17,12 +17,37 @@ enum Theme {
     /// The tint laid over a translucent surface, so glass reads cream rather than grey.
     static let surfaceTint = dynamic(light: 0xfbf3ea, dark: 0x1d1916, alpha: 0.78)
 
-    private static func dynamic(light: Int, dark: Int, alpha: CGFloat = 1) -> Color {
+    fileprivate static func dynamic(light: Int, dark: Int, alpha: CGFloat = 1) -> Color {
         Color(nsColor: NSColor(name: nil) { appearance in
             let isDark = appearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua
             return NSColor(hex: isDark ? dark : light, alpha: alpha)
         })
     }
+}
+
+/// The colour of the selection ring and the search caret. Pebble, a soft
+/// grey, is the default; every option keeps about 3:1 against the tiles.
+struct Accent: Identifiable, Equatable {
+    let id: String
+    let name: LocalizedStringResource
+    let color: Color
+
+    static func == (a: Accent, b: Accent) -> Bool { a.id == b.id }
+
+    static let all: [Accent] = [
+        Accent(id: "pebble", name: "Pebble", color: Theme.dynamic(light: 0x8f8881, dark: 0xa8a098)),
+        Accent(id: "sky", name: "Sky", color: Theme.dynamic(light: 0x3d8fd6, dark: 0x6fb4ee)),
+        Accent(id: "mint", name: "Mint", color: Theme.dynamic(light: 0x2f9e74, dark: 0x5fc79e)),
+        Accent(id: "lilac", name: "Lilac", color: Theme.dynamic(light: 0x8a6fd0, dark: 0xb39cec)),
+        Accent(id: "sun", name: "Sun", color: Theme.dynamic(light: 0xd99a1e, dark: 0xf2c25a)),
+        Accent(id: "coral", name: "Coral", color: Theme.coral),
+        Accent(id: "graphite", name: "Graphite", color: Theme.dynamic(light: 0x3a3532, dark: 0xd8d0c8)),
+        Accent(id: "system", name: "System", color: Color(nsColor: .controlAccentColor)),
+    ]
+
+    static let pebble = all[0]
+
+    static func named(_ id: String) -> Accent { all.first { $0.id == id } ?? .pebble }
 }
 
 /// Springs. Critically damped by default; nothing in Ferry is flung, so
@@ -75,6 +100,7 @@ struct Palette {
 }
 
 private struct PaletteKey: EnvironmentKey { static let defaultValue = Palette.cream }
+private struct AccentKey: EnvironmentKey { static let defaultValue = Accent.pebble }
 private struct StaticRenderKey: EnvironmentKey { static let defaultValue = false }
 
 extension EnvironmentValues {
@@ -88,6 +114,11 @@ extension EnvironmentValues {
     var palette: Palette {
         get { self[PaletteKey.self] }
         set { self[PaletteKey.self] = newValue }
+    }
+
+    var accent: Accent {
+        get { self[AccentKey.self] }
+        set { self[AccentKey.self] = newValue }
     }
 }
 

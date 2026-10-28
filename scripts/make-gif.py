@@ -5,7 +5,7 @@
     python3 scripts/make-gif.py <dir>/gif docs/assets/readme/demo-en.gif
 
 The renderer draws the switcher once with no selection (base.png) and once
-per selected tile (sel-N.png). Here the coral ring slides between tiles on
+per selected tile (sel-N.png). Here the selection ring slides between tiles on
 the same critically damped spring the app uses, and the panel opens and
 closes on the app's presentation spring.
 """
@@ -19,7 +19,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 FPS = 30
 OUT_WIDTH = 960
-CORAL = (232, 102, 79)
+CORAL = (143, 136, 129)  # the ring colour (pebble grey)
 
 frames_dir, out = Path(sys.argv[1]), Path(sys.argv[2])
 base = Image.open(frames_dir / 'base.png').convert('RGBA')

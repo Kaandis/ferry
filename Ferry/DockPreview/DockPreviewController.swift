@@ -295,11 +295,13 @@ final class DockPreviewController {
 private struct DockPreviewRoot: View {
     let model: DockPreviewModel
     @AppStorage(Prefs.panelStyle) private var style = "cream"
+    @AppStorage(Prefs.accentColor) private var accent = "pebble"
 
     var body: some View {
         DockPreviewView(model: model, thumbnails: ThumbnailCache.shared,
                         showsPictures: Permissions.shared.screenRecording)
             .environment(\.palette, .named(style))
+            .environment(\.accent, .named(accent))
             .padding(DockPreviewMetrics.margin)
     }
 }

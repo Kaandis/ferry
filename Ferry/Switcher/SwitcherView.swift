@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// The switcher: a calm cream surface with one tile per window. The coral
-/// ring slides to the selection on a critically damped spring.
+/// The switcher: a calm cream surface with one tile per window. A ring in the
+/// chosen highlight colour slides to the selection on a critically damped spring.
 struct SwitcherView: View {
     @Bindable var model: SwitcherModel
     var thumbnails: ThumbnailCache
@@ -80,6 +80,7 @@ struct SwitcherView: View {
 
 private struct Tile: View {
     @Environment(\.palette) private var palette
+    @Environment(\.accent) private var accent
     let item: WindowItem
     let image: CGImage?
     let layout: SwitcherLayout
@@ -121,7 +122,7 @@ private struct Tile: View {
                         .fill(palette.card)
                         .overlay(
                             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .strokeBorder(Theme.coral, lineWidth: 2)
+                                .strokeBorder(accent.color, lineWidth: 2)
                         )
                         .shadow(color: .black.opacity(0.08), radius: 6, y: 2)
                         .matchedGeometryEffect(id: "selection", in: selection)
@@ -142,6 +143,7 @@ private struct Tile: View {
 
 private struct SearchField: View {
     @Environment(\.palette) private var palette
+    @Environment(\.accent) private var accent
     let query: String
 
     var body: some View {
@@ -155,7 +157,7 @@ private struct SearchField: View {
             } else {
                 Text(query).foregroundStyle(palette.ink)
             }
-            RoundedRectangle(cornerRadius: 1).fill(Theme.coral).frame(width: 2, height: 18)
+            RoundedRectangle(cornerRadius: 1).fill(accent.color).frame(width: 2, height: 18)
                 .padding(.leading, query.isEmpty ? -8 : -6)
                 .opacity(query.isEmpty ? 0 : 1)
             Spacer(minLength: 0)

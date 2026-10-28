@@ -63,6 +63,7 @@ struct DockPreviewView: View {
 
 private struct Card: View {
     @Environment(\.palette) private var palette
+    @Environment(\.accent) private var accent
     let item: WindowItem
     let image: CGImage?
     let isHovered: Bool
@@ -89,7 +90,7 @@ private struct Card: View {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .fill(palette.card)
                         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .strokeBorder(Theme.coral, lineWidth: 2))
+                            .strokeBorder(accent.color, lineWidth: 2))
                 }
             }
             .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))

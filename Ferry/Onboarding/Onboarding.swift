@@ -126,7 +126,7 @@ private struct PermissionRow: View {
         HStack(alignment: .top, spacing: 14) {
             Image(systemName: symbol)
                 .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(Theme.coralText)
+                .foregroundStyle(Theme.ink)
                 .frame(width: 36, height: 36)
                 .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Theme.raised))
 
@@ -155,7 +155,7 @@ private struct PermissionRow: View {
                 if granted {
                     Label("Allowed", systemImage: "checkmark.circle.fill")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Theme.coralText)
+                        .foregroundStyle(Theme.ink2)
                         .frame(height: 30)
                         .transition(.opacity.combined(with: .scale(scale: 0.9)))
                 } else {

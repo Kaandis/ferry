@@ -24,7 +24,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/assets/readme/demo-en.gif" width="720" alt="Ferry opening on ⌥Tab, the coral selection sliding from window to window, then closing">
+  <img src="docs/assets/readme/demo-en.gif" width="720" alt="Ferry opening on ⌥Tab, the selection ring sliding from window to window, then closing">
 </p>
 
 ## What it does
@@ -37,7 +37,7 @@
 | **Dock previews** — rest the pointer on a Dock icon to see that app’s windows. Click one to bring it forward, or close it right there. | <img src="docs/assets/shots/en/dock.png" width="420" alt="Dock preview"> |
 | **Works without pictures** — Screen Recording is optional. Without it, tiles show app icons and everything else works the same. | <img src="docs/assets/shots/en/icons.png" width="420" alt="Switcher with app icons"> |
 
-Also: **W** closes, **M** minimizes, **Q** quits and **H** hides the selected window’s app without letting go; arrow keys and the mouse work too. Use ⌥Tab, ⌘Tab (Ferry takes it over and hands it back on quit) or ⌃Tab. Panels come in Harbor’s cream or in Liquid Glass (macOS 26 and later), set in **Settings → General → Appearance**. It opens on the display with the pointer, follows Reduce Motion, Reduce Transparency and Increase Contrast, and speaks English and Turkish.
+Also: **W** closes, **M** minimizes, **Q** quits and **H** hides the selected window’s app without letting go; arrow keys and the mouse work too. Use ⌥Tab, ⌘Tab (Ferry takes it over and hands it back on quit) or ⌃Tab. Panels come in Harbor’s cream or in Liquid Glass (macOS 26 and later), and the selection ring takes the highlight colour you pick (a soft pebble grey by default), both in **Settings → General**. It opens on the display with the pointer, follows Reduce Motion, Reduce Transparency and Increase Contrast, and speaks English and Turkish.
 
 ## Why it works this way
 
@@ -46,7 +46,7 @@ Also: **W** closes, **M** minimizes, **Q** quits and **H** hides the selected wi
 - **Pictures are taken, not streamed.** ScreenCaptureKit takes one small still image per window (at most 560 px on the long side) when the switcher or a Dock preview is about to show it, and when you leave an app. macOS can’t picture windows on other Spaces, so Ferry keeps the last picture it took while the window was on screen.
 - **Windows on other Spaces without guesswork.** A window’s Space comes from WindowServer, its title and role from Accessibility. Apps keep closed windows around (Music and Calendar do), and those still report a Space; Ferry only lists windows WindowServer says are actually shown. Untitled windows are checked through Accessibility too, so helper windows don’t sneak in.
 - **No flicker on a quick tap.** The panel waits 90 ms before appearing. Tap and release fast and you just land on the previous window, the way the system switcher feels.
-- **Springs, not timelines.** The panel and the coral selection move on critically damped springs that start from wherever they are, so you can reverse halfway and nothing bounces. The panel’s entrance and exit run in Core Animation, so its content is drawn once. With Reduce Motion it simply fades.
+- **Springs, not timelines.** The panel and the selection ring move on critically damped springs that start from wherever they are, so you can reverse halfway and nothing bounces. The panel’s entrance and exit run in Core Animation, so its content is drawn once. With Reduce Motion it simply fades.
 - **Dock previews leave when you do.** While a preview is up, and only then, Ferry follows the pointer; the moment it’s on neither the Dock nor the preview, the preview goes.
 - **It steps aside on its own website.** When the page in front is Ferry’s site, ⌥Tab goes to the page so its demo works with Ferry installed.
 - **One permission to work, one for pictures.** Each is explained in the welcome window, and status updates live as you flip the switch in System Settings.
