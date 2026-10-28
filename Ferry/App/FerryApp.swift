@@ -1,3 +1,4 @@
+import HarborKit
 import OSLog
 import SwiftUI
 
@@ -21,6 +22,7 @@ struct FerryApp: App {
 
 private struct MenuBarContent: View {
     private var permissions = Permissions.shared
+    @Environment(\.openSettings) private var openSettings
 
     var body: some View {
         if !permissions.accessibility {
@@ -28,11 +30,14 @@ private struct MenuBarContent: View {
             Divider()
         }
 
-        SettingsLink {
-            Text("Settings…")
+        // With Harbor installed, settings live there; otherwise in Ferry's own window.
+        Button("Settings…") {
+            if !HarborLink.openSettings(appID: "ferry") {
+                NSApp.activate()
+                openSettings()
+            }
         }
         .keyboardShortcut(",")
-        .simultaneousGesture(TapGesture().onEnded { NSApp.activate() })
 
         Button("Permissions…") { Onboarding.show() }
 
@@ -54,10 +59,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         PreviewRenderer.runIfRequested()
         #endif
         Prefs.registerDefaults()
+        SettingsBridge.listen()
         restoreCommandTabOnSignals()
 
         let permissions = Permissions.shared
         permissions.start()
+        permissions.refresh()
         permissions.onAccessibilityGranted = { [weak self] in self?.startServices() }
         log.notice("Launched. accessibility=\(permissions.accessibility) screenRecording=\(permissions.screenRecording)")
         if permissions.accessibility { startServices() }

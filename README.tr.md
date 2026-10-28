@@ -64,6 +64,10 @@ M4 Pro’da (macOS 27, tek 2560×1440 ekran, üç Space’e dağılmış yaklaş
 
 Kendin de bakabilirsin: `top -pid $(pgrep -x Ferry) -stats pid,cpu,idlew,mem`
 
+## Harbor
+
+Ferry, **Harbor** ailesinin parçası. [Harbor](https://kaandis.github.io/harbor/) uygulamasını kurarsan tüm Harbor uygulamalarını tek yerde görür, güncellemelerden haberdar olur ve Ferry’nin ayarlarını orada değiştirirsin; Ferry’nin **Ayarlar…** menüsü de Harbor’daki sayfasını açar. Harbor yoksa Ferry kendi küçük Ayarlar penceresini kullanmaya devam eder.
+
 ## Kurulum
 
 1. Son sürümden **[Ferry.zip](https://github.com/Kaandis/ferry/releases/latest/download/Ferry.zip)** dosyasını indir ve aç.

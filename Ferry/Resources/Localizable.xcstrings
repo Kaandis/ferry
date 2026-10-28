@@ -179,16 +179,6 @@
         }
       }
     },
-    "Coral": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mercan"
-          }
-        }
-      }
-    },
     "Cream": {
       "localizations": {
         "tr": {
@@ -379,16 +369,6 @@
         }
       }
     },
-    "Graphite": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grafit"
-          }
-        }
-      }
-    },
     "Hidden": {
       "localizations": {
         "tr": {
@@ -489,16 +469,6 @@
         }
       }
     },
-    "Lilac": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leylak"
-          }
-        }
-      }
-    },
     "Liquid Glass": {
       "localizations": {
         "tr": {
@@ -525,16 +495,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Küçültülmüş"
-          }
-        }
-      }
-    },
-    "Mint": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nane"
           }
         }
       }
@@ -615,16 +575,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "İsteğe bağlı"
-          }
-        }
-      }
-    },
-    "Pebble": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Çakıl"
           }
         }
       }
@@ -789,42 +739,12 @@
         }
       }
     },
-    "Sky": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gök"
-          }
-        }
-      }
-    },
-    "Sun": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Güneş"
-          }
-        }
-      }
-    },
     "Switcher": {
       "localizations": {
         "tr": {
           "stringUnit": {
             "state": "translated",
             "value": "Switcher"
-          }
-        }
-      }
-    },
-    "System": {
-      "localizations": {
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sistem"
           }
         }
       }

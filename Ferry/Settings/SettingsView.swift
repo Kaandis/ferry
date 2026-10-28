@@ -1,3 +1,4 @@
+import HarborKit
 import ServiceManagement
 import SwiftUI
 import UniformTypeIdentifiers
@@ -77,30 +78,6 @@ private struct GeneralSettings: View {
             }
         }
         .formStyle(.grouped)
-    }
-}
-
-/// A row of colour dots, one per highlight.
-private struct AccentPicker: View {
-    @Binding var selection: String
-
-    var body: some View {
-        HStack(spacing: 8) {
-            ForEach(Accent.all) { accent in
-                let selected = accent.id == selection
-                Button { selection = accent.id } label: {
-                    Circle()
-                        .fill(accent.color)
-                        .frame(width: 18, height: 18)
-                        .padding(3)
-                        .overlay(Circle().strokeBorder(selected ? Color.primary : .clear, lineWidth: 1.5))
-                }
-                .buttonStyle(PressableStyle())
-                .help(Text(accent.name))
-                .accessibilityLabel(Text(accent.name))
-                .accessibilityAddTraits(selected ? .isSelected : [])
-            }
-        }
     }
 }
 

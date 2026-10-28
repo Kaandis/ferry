@@ -1,5 +1,6 @@
 import AppKit
 import ApplicationServices
+import HarborKit
 import Observation
 
 /// Accessibility (required) and Screen Recording (optional, for pictures).
@@ -46,6 +47,7 @@ final class Permissions {
         if recording != screenRecording { screenRecording = recording }
         if accessibility && !wasTrusted { onAccessibilityGranted?() }
         if accessibility && screenRecording { watch(false) }
+        SettingsBridge.publishPermissions(["accessibility": accessibility, "screenRecording": screenRecording])
     }
 
     /// Re-reads both permissions every second while `active` (the welcome window is open).

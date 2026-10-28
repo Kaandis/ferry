@@ -64,6 +64,10 @@ On an M4 Pro (macOS 27, one 2560×1440 display, about ten windows across three S
 
 You can check it yourself with `top -pid $(pgrep -x Ferry) -stats pid,cpu,idlew,mem`.
 
+## Harbor
+
+Ferry is part of **Harbor**. Install the [Harbor](https://kaandis.github.io/harbor/) app to see every Harbor app in one place, get told about updates and change Ferry’s settings there; Ferry’s **Settings…** menu item then opens its Harbor page. Without Harbor, Ferry keeps its own small Settings window.
+
 ## Install
 
 1. Download **[Ferry.zip](https://github.com/Kaandis/ferry/releases/latest/download/Ferry.zip)** from the latest release and unzip it.

@@ -1,4 +1,5 @@
 import AppKit
+import HarborKit
 import SwiftUI
 
 /// The welcome window: what Ferry does, and the two permissions it asks for.

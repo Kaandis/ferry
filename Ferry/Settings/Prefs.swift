@@ -1,4 +1,5 @@
 import Foundation
+import HarborKit
 
 /// UserDefaults keys shared by @AppStorage and the services. Every key a user
 /// can change is also described in `Resources/settings-schema.json` so the

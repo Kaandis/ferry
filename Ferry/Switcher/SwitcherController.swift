@@ -1,4 +1,5 @@
 import AppKit
+import HarborKit
 import SwiftUI
 
 /// Runs the switcher: hold the modifier, tap Tab to step, let go to switch.
@@ -66,6 +67,9 @@ final class SwitcherController {
         default: .maskAlternate
         }
         holdMask = mask
+        #if DEBUG
+        log.notice("Switcher modifier: \(Prefs.string(Prefs.switcherModifier), privacy: .public)")
+        #endif
         guard mask != appliedMask else { return }
         appliedMask = mask
         // Taking over ⌘Tab means switching the system's own one off.

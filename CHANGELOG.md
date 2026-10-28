@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2 — 2026-10-29
+
+- Works with the new [Harbor](https://kaandis.github.io/harbor/) hub: settings changed there apply to Ferry right away, and Ferry’s menu opens its Harbor page when Harbor is installed (its own Settings window otherwise).
+- Ferry tells Harbor which permissions it has, so Harbor can show them.
+- Shared design code now lives in [HarborKit](https://github.com/Kaandis/harbor-kit).
+
 ## 1.1 — 2026-10-28
 
 - Appearance: Harbor’s cream or Liquid Glass (macOS 26 and later), and a highlight colour for the selection: pebble grey by default, or sky, mint, lilac, sun, coral, graphite or the system accent. Both in Settings → General.

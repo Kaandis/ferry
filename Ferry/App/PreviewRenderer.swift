@@ -1,6 +1,7 @@
 #if DEBUG
 import AppKit
 import SwiftUI
+import HarborKit
 
 /// `Ferry --render-previews <dir>` writes a PNG of every UI state and exits.
 /// Uses made-up apps and drawn window pictures, so the UI can be checked

@@ -6,10 +6,15 @@ options:
   createIntermediateGroups: true
   developmentLanguage: en
 
+packages:
+  HarborKit:
+    url: https://github.com/Kaandis/harbor-kit
+    from: 0.1.0
+
 settings:
   base:
     SWIFT_VERSION: "5.0"
-    MARKETING_VERSION: "1.1"
+    MARKETING_VERSION: "1.2"
     CURRENT_PROJECT_VERSION: "1"
     DEVELOPMENT_TEAM: ""
     CODE_SIGN_STYLE: Automatic
@@ -24,6 +29,8 @@ targets:
     platform: macOS
     sources:
       - path: Ferry
+    dependencies:
+      - package: HarborKit
     info:
       path: Ferry/Resources/Info.plist
       properties:
