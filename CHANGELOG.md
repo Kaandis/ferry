@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1 — 2026-10-29
+
+- Signed with a stable Harbor certificate, so macOS keeps Ferry’s permissions when it updates. (Updating from 1.2 or earlier asks one last time.)
+
 ## 1.2 — 2026-10-29
 
 - Works with the new [Harbor](https://kaandis.github.io/harbor/) hub: settings changed there apply to Ferry right away, and Ferry’s menu opens its Harbor page when Harbor is installed (its own Settings window otherwise).

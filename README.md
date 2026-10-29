@@ -119,6 +119,8 @@ build/dd/Build/Products/Debug/Ferry.app/Contents/MacOS/Ferry --render-previews .
 
 Add `--transparent --gif` to also write the frames `scripts/make-gif.py` turns into the animation above.
 
+Releases are built with `scripts/release.sh`. It signs Ferry with the same Harbor certificate every time so macOS keeps its permissions across updates, then zips it and prints the SHA-256 for the Harbor catalog.
+
 <details>
 <summary>Project layout</summary>
 

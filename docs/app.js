@@ -661,7 +661,7 @@
   const HARBOR = [
     { id: 'inlet', name: 'Inlet', url: 'https://kaandis.github.io/inlet/', icon: 'assets/inlet-icon.png?v=1' },
     { id: 'ferry', name: 'Ferry', url: 'https://kaandis.github.io/ferry/', icon: 'assets/icon.png?v=1', running: true },
-    { id: 'harbor', name: 'Harbor', url: 'https://kaandis.github.io/harbor/', icon: 'assets/harbor-icon.png?v=1' },
+    { id: 'harbor', name: 'Harbor', url: 'https://kaandis.github.io/harbor/', icon: 'assets/harbor-icon.png?v=3' },
   ];
   const dock = $('#dock');
   const preview = $('#dockPreview');
