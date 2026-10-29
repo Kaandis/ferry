@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.2 — 2026-10-29
+
+- Full-screen windows always show in the switcher, titled or not (a video playing full screen in Safari, say).
+- An app that's busy and slow to answer no longer drops out of the switcher; its windows on screen stay.
+- Apps that turn into regular apps after launching now show up.
+- Minimized windows and hidden apps' windows are found more reliably.
+- Dock previews reconnect when the Dock restarts or rebuilds its icons (after a display change or wake), and match an app by bundle identifier when its Dock path differs.
+- `Ferry --list-windows` prints every window Ferry sees and why it is or isn't in the switcher.
+- When Harbor uninstalls Ferry, Ferry removes its own login item first, so nothing is left in System Settings › Login Items.
+
 ## 1.2.1 — 2026-10-29
 
 - Signed with a stable Harbor certificate, so macOS keeps Ferry’s permissions when it updates. (Updating from 1.2 or earlier asks one last time.)

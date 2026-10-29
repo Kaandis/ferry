@@ -21,6 +21,8 @@ final class WindowStore {
         /// Walk Accessibility tokens to confirm untitled windows on other Spaces.
         /// Only the switcher needs this; picture refreshes skip it.
         var lookUpOtherSpaces = true
+        /// Called with why each window was kept or left out, for `--list-windows`.
+        var trace: (@Sendable (String) -> Void)?
     }
 
     private final class TrackedApp {
@@ -140,6 +142,9 @@ final class WindowStore {
     /// Spaces have been looked up.
     func snapshot(_ options: Options, update: @escaping @MainActor ([WindowItem]) -> Void) {
         guard isStarted else { update([]); return }
+        // Some apps start as background agents and only later become regular
+        // (or weren't ready when they launched); pick those up here.
+        NSWorkspace.shared.runningApplications.forEach(track)
         let inputs = apps.values
             .filter { options.onlyPID == nil || $0.app.processIdentifier == options.onlyPID }
             .filter { !options.excludedBundleIDs.contains($0.app.bundleIdentifier ?? "") }
@@ -228,6 +233,9 @@ final class WindowStore {
 
         // Accessibility details for windows on the current Space (and minimized ones).
         var ax: [CGWindowID: AXWindow] = [:]
+        // Apps that didn't answer in time (busy playing full-screen video, say).
+        // Their windows on this Space are kept from WindowServer's list alone.
+        var unanswered: Set<pid_t> = []
         let pidsWithWindows = Set(list.compactMap { entry -> pid_t? in
             guard entry[kCGWindowLayer as String] as? Int == 0 else { return nil }
             return entry[kCGWindowOwnerPID as String] as? pid_t
@@ -240,6 +248,9 @@ final class WindowStore {
                 for element in windows {
                     if let id = PrivateAPI.windowID(of: element) { ax[id] = describe(element) }
                 }
+            } else {
+                unanswered.insert(pid)
+                options.trace?("\(app.name): Accessibility didn't answer")
             }
         }
 
@@ -265,32 +276,65 @@ final class WindowStore {
             let onScreen = entry[kCGWindowIsOnscreen as String] as? Bool ?? false
             let windowSpaces = PrivateAPI.spaces(for: id)
 
+            let title = entry[kCGWindowName as String] as? String ?? ""
+            let label = "\(app.name) #\(id) \"\(title)\""
             var info = ax[id]
             if info == nil {
-                // Not in the app's list: on another Space, or not a real window at all.
-                guard !windowSpaces.isEmpty, windowSpaces.allSatisfy({ !spaces.visible.contains($0) }),
-                      orderedIn?.contains(id) ?? true else { continue }
-                if let element = app.tokenWindows?[id] {
+                // Not in the app's list: on another Space, not answered in time, or
+                // not a real window at all.
+                let onFullScreenSpace = windowSpaces.contains { spaces.fullScreen.contains($0) }
+                let elsewhere = !windowSpaces.isEmpty && windowSpaces.allSatisfy { !spaces.visible.contains($0) }
+                let shown = orderedIn?.contains(id) ?? true
+                let parked = windowSpaces.isEmpty
+                if let element = app.tokenWindows?[id], elsewhere || onFullScreenSpace {
                     info = describe(element)
-                } else {
-                    // The token walk only reaches the first thousand elements, so a
-                    // long-running app's windows can be missing from it. A window
-                    // with a title, on a desktop Space, is trusted as it is.
-                    if app.tokenWindows == nil { out.needsTokenLookup.insert(pid) }
-                    let title = entry[kCGWindowName as String] as? String ?? ""
-                    guard !title.isEmpty else { continue }
+                } else if parked, let element = app.tokenWindows?[id],
+                          case let found = describe(element), found.minimized || app.isHidden {
+                    // On no Space at all: minimized, or its app is hidden. Apps
+                    // also park closed windows there, so only these two count.
+                    info = found
+                } else if parked && app.isHidden && !title.isEmpty && app.tokenWindows?[id] == nil {
+                    // A hidden app's titled window the token walk didn't reach.
                     var item = WindowItem(id: id, pid: pid, bundleID: app.bundleID, appName: app.name, title: title, frame: frame)
-                    item.isOnScreen = false
                     item.isConfirmed = false
-                    item.otherSpace = windowSpaces.compactMap { spaces.numbers[$0] }.first
-                    item.isFullScreen = windowSpaces.contains { spaces.fullScreen.contains($0) }
+                    item.isAppHidden = true
+                    ranked.append((rank[id] ?? 10_000 + order, item))
+                    order += 1
+                    if app.tokenWindows == nil { out.needsTokenLookup.insert(pid) }
+                    options.trace?("kept \(label): app hidden")
+                    continue
+                } else if onFullScreenSpace || (elsewhere && shown && !title.isEmpty)
+                            || (unanswered.contains(pid) && onScreen && shown) {
+                    // A full-screen Space holds one app's window, so it's real even
+                    // untitled (a video, say). A titled window shown on another
+                    // desktop is trusted as it is: the token walk only reaches the
+                    // first thousand elements, so a long-running app's windows can
+                    // be missing from it. A busy app's visible windows stay too.
+                    if elsewhere && app.tokenWindows == nil { out.needsTokenLookup.insert(pid) }
+                    var item = WindowItem(id: id, pid: pid, bundleID: app.bundleID, appName: app.name,
+                                          title: title.isEmpty ? app.name : title, frame: frame)
+                    item.isOnScreen = onScreen
+                    item.isConfirmed = false
+                    item.otherSpace = elsewhere ? windowSpaces.compactMap { spaces.numbers[$0] }.first : nil
+                    item.isFullScreen = onFullScreenSpace
                     item.isAppHidden = app.isHidden
                     ranked.append((rank[id] ?? 10_000 + order, item))
                     order += 1
+                    options.trace?("kept \(label): " + (onFullScreenSpace ? "full-screen Space" : elsewhere ? "titled, on another Space" : "app busy, on screen"))
+                    continue
+                } else {
+                    if (elsewhere || parked) && app.tokenWindows == nil { out.needsTokenLookup.insert(pid) }
+                    let why = parked ? "on no Space\(app.isHidden ? ", app hidden" : ""), \(app.tokenWindows?[id] != nil ? "not minimized" : "not found by token")"
+                        : !elsewhere ? "not listed by the app on this Space" : !shown ? "not ordered in" : "untitled, not found by token"
+                    options.trace?("left out \(label): " + why)
                     continue
                 }
             }
-            guard let info, ["AXStandardWindow", "AXDialog"].contains(info.subrole) || info.fullScreen else { continue }
+            guard let info, ["AXStandardWindow", "AXDialog"].contains(info.subrole) || info.fullScreen else {
+                options.trace?("left out \(label): subrole \(info?.subrole ?? "?")")
+                continue
+            }
+            options.trace?("kept \(label)")
 
             var item = WindowItem(id: id, pid: pid, bundleID: app.bundleID, appName: app.name,
                                   title: info.title, frame: frame)

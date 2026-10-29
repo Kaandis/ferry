@@ -58,6 +58,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         #if DEBUG
         PreviewRenderer.runIfRequested()
         #endif
+        if Diagnostics.runIfRequested() { return }
         Prefs.registerDefaults()
         SettingsBridge.listen()
         restoreCommandTabOnSignals()

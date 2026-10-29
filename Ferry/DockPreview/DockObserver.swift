@@ -17,48 +17,73 @@ final class DockObserver {
     private var observer: AXObserver?
     private var list: AXUIElement?
     private var dockPID: pid_t = 0
-    private var launchToken: NSObjectProtocol?
+    private var tokens: [(NotificationCenter, NSObjectProtocol)] = []
+    private var retry: DispatchWorkItem?
 
     func start() {
-        attach()
-        // The Dock restarts now and then (killall Dock, display changes); follow it.
-        launchToken = NSWorkspace.shared.notificationCenter.addObserver(
+        attachSoon()
+        // The Dock restarts now and then (killall Dock), and rebuilds its icon
+        // list when displays change or the Mac wakes; the old list then stops
+        // reporting. Attach again each time.
+        let workspace = NSWorkspace.shared.notificationCenter
+        tokens.append((workspace, workspace.addObserver(
             forName: NSWorkspace.didLaunchApplicationNotification, object: nil, queue: .main
         ) { [weak self] note in
             let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
             guard app?.bundleIdentifier == "com.apple.dock" else { return }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                MainActor.assumeIsolated { self?.attach() }
-            }
-        }
+            MainActor.assumeIsolated { self?.attachSoon(after: 1) }
+        }))
+        tokens.append((workspace, workspace.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.attachSoon(after: 2) }
+        }))
+        tokens.append((NotificationCenter.default, NotificationCenter.default.addObserver(
+            forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated { self?.attachSoon(after: 1) }
+        }))
     }
 
     func stop() {
+        retry?.cancel()
         detach()
-        if let launchToken { NSWorkspace.shared.notificationCenter.removeObserver(launchToken) }
-        launchToken = nil
+        tokens.forEach { $0.0.removeObserver($0.1) }
+        tokens.removeAll()
     }
 
-    private func attach() {
+    /// Attaches now (or after `delay`), trying again a few times while the
+    /// Dock is still starting up.
+    private func attachSoon(after delay: TimeInterval = 0, attempt: Int = 0) {
+        retry?.cancel()
+        let work = DispatchWorkItem { [weak self] in
+            guard let self, !self.attach(), attempt < 4 else { return }
+            self.attachSoon(after: [1, 2, 4, 8][attempt], attempt: attempt + 1)
+        }
+        retry = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: work)
+    }
+
+    @discardableResult
+    private func attach() -> Bool {
         detach()
         guard let dock = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first
-        else { return }
+        else { return false }
         dockPID = dock.processIdentifier
         let app = AXUIElementCreateApplication(dockPID)
         AXUIElementSetMessagingTimeout(app, 0.25)
         var children: CFTypeRef?
         guard AXUIElementCopyAttributeValue(app, kAXChildrenAttribute as CFString, &children) == .success,
               let list = (children as? [AXUIElement])?.first(where: { role(of: $0) == kAXListRole })
-        else { return }
+        else { return false }
 
         var observer: AXObserver?
-        guard AXObserverCreate(dockPID, dockCallback, &observer) == .success, let observer else { return }
+        guard AXObserverCreate(dockPID, dockCallback, &observer) == .success, let observer else { return false }
         let refcon = Unmanaged.passUnretained(self).toOpaque()
         guard AXObserverAddNotification(observer, list, kAXSelectedChildrenChangedNotification as CFString, refcon)
-                == .success else { return }
+                == .success else { return false }
         CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
         self.observer = observer
         self.list = list
+        return true
     }
 
     private func detach() {
@@ -89,15 +114,25 @@ final class DockObserver {
     private func currentHover() -> Hover? {
         guard let list else { return nil }
         var selected: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(list, kAXSelectedChildrenAttribute as CFString, &selected) == .success,
+        let result = AXUIElementCopyAttributeValue(list, kAXSelectedChildrenAttribute as CFString, &selected)
+        if result == .invalidUIElement {
+            // The Dock rebuilt its list under us.
+            attachSoon()
+            return nil
+        }
+        guard result == .success,
               let item = (selected as? [AXUIElement])?.first,
               attribute(item, kAXSubroleAttribute) as? String == "AXApplicationDockItem",
               let url = attribute(item, kAXURLAttribute) as? URL
         else { return nil }
+        // Match by location, or by bundle id when the Dock's copy and the
+        // running one sit at different paths.
         let path = url.standardizedFileURL.resolvingSymlinksInPath().path
-        guard let app = NSWorkspace.shared.runningApplications.first(where: {
-            $0.bundleURL?.standardizedFileURL.resolvingSymlinksInPath().path == path
-        }) else { return nil }
+        let running = NSWorkspace.shared.runningApplications
+        let bundleID = Bundle(url: url)?.bundleIdentifier
+        guard let app = running.first(where: { $0.bundleURL?.standardizedFileURL.resolvingSymlinksInPath().path == path })
+                ?? running.first(where: { bundleID != nil && $0.bundleIdentifier == bundleID && $0.activationPolicy == .regular })
+        else { return nil }
 
         var origin = CGPoint.zero
         var size = CGSize.zero
