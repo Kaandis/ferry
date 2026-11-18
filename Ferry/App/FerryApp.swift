@@ -54,6 +54,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let dockPreviews = DockPreviewController()
     private var signalSources: [DispatchSourceSignal] = []
 
+    /// macOS 27 can quit a running menu bar app as idle; turn that down.
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        QuitGuard.reply()
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         #if DEBUG
         PreviewRenderer.runIfRequested()

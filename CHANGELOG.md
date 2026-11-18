@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.3 — 2026-11-18
+
+- Ferry no longer disappears on its own: macOS 27 sometimes quit it as an idle background app; Ferry now turns that quit down.
+
 ## 1.2.2 — 2026-10-29
 
 - Full-screen windows always show in the switcher, titled or not (a video playing full screen in Safari, say).
